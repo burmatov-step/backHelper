@@ -68,6 +68,13 @@ class UserController{
             next(e)
         }
     }
+    async save(req, res, next){
+        try{
+            console.log(33333)
+        } catch(e){
+            next(e)
+        }
+    }
 }
 
 
