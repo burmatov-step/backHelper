@@ -9,7 +9,6 @@ class UserService{
     async registration(email, password){
         const candidate = await UserModel.findOne({email})
         if(candidate){
-            console.log(33333)
             throw ApiError.BadRequest(`Пользователь с Email ${email} уже существует`)
         }
 
