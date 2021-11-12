@@ -7,8 +7,7 @@ class Find_accounts{
         try{
             const {userId, login} = req.body;
             const dataAccaunt = await FindAccountModel.create({user: userId, login})
-            console.log(dataAccaunt)
-
+            return res.json(dataAccaunt)
         } catch(e){
             next(e)
         }
@@ -19,6 +18,15 @@ class Find_accounts{
             const {userId} = req.body;
             const accounts = await FindAccountModel.find({user: userId});
             return res.json(accounts)
+        } catch(e){
+            next(e)
+        }
+    }
+    async removeAccount(req, res, next){
+        try{
+            const {userId, idAccount} = req.body;
+            const deleteAccount = await FindAccountModel.remove({ _id: idAccount, user: userId});
+            return res.json(deleteAccount)
         } catch(e){
             next(e)
         }
