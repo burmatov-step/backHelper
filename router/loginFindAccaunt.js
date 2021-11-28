@@ -5,5 +5,6 @@ const Find_accounts = require('../controllers/find_accounts')
 router.post('/create_find_account',  Find_accounts.create);
 router.post('/findAll_account',  Find_accounts.findAll);
 router.post('/delete_account',  Find_accounts.removeAccount);
+router.post('/test_fb',  Find_accounts.testFacebook);
 
 module.exports = router

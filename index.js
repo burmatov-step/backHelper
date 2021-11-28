@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser')
 const mongoose = require('mongoose')
 const routerAuth = require('./router/index')
 const loginFindAccaunt = require('./router/loginFindAccaunt')
+const typeAccaunt = require('./router/type_find_account')
 const errorMiddleware = require('./middlewares/error-middleware')
 
 const PORT = process.env.PORT || 5000
@@ -17,9 +18,8 @@ app.use(cors({
 }))
 app.use('/api', routerAuth)
 app.use('/api', loginFindAccaunt)
+app.use('/api', typeAccaunt)
 app.use(errorMiddleware)
-
-
 const start = async () =>{
    try{
        await mongoose.connect(process.env.DB_URL,{

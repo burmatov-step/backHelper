@@ -11,7 +11,7 @@ router.post('/registration', body('email').isEmail(),  body('password').isLength
 router.post('/login', UserController.login)
 router.post('/logout', UserController.logout)
 router.get('/activate/:link', UserController.activate)
-router.get('/refresh', UserController.refresh)
+router.post('/refresh', UserController.refresh)
 router.get('/users', authMiddleware, UserController.getUsers);
 router.post('/save_video',  Save_video.save);
 // router.post('/create_find_account',  Find_accounts.create);

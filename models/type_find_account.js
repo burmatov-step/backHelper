@@ -1,10 +1,9 @@
 const {Schema, model} = require('mongoose');
 
-const AllFindAccount = new Schema({
+const TypeFindAccount = new Schema({
     user: {type: Schema.Types.ObjectId, ref: 'User'},
-    login: {type: String, required: true},
     type: {type: String, required: true},
 })
 
 
-module.exports = model('FindAccount', AllFindAccount)
+module.exports = model('TypeFindAccount', TypeFindAccount)
