@@ -51,7 +51,6 @@ class Find_accounts{
 
             async function main(body) {
                 for await (let item of loginData) {
-                    console.log(item);
                     let res = await doRequest(`https://graph.facebook.com/v11.0/${JSON.parse(body).data[0].instagram_business_account.id}?fields=business_discovery.username(${item.login}){followers_count,media_count,media{comments_count,caption,media_type,children{media_url,media_type},like_count,media_url}}&access_token=${token}`);
                     dataPosts = [...dataPosts, ...JSON.parse(res).business_discovery.media.data]
                 } 
@@ -62,7 +61,7 @@ class Find_accounts{
 
                 request(`https://graph.facebook.com/v11.0/me/accounts?fields=instagram_business_account&access_token=${token}`, async(error, response, body) => {
                    await main(body)
-                    console.log("dataPostssss", dataPosts)
+                    console.log("body", body)
                 });
             }
 
