@@ -27,7 +27,7 @@ class Find_accounts{
                     let data = {
                         'user': userId,
                         'id_fb': `${item.id}`,
-                        'userIdFb': `${userIdFb}`
+                        'userIdFb': `${userIdFb}`,
                     }
                     const userFb = await Fb_users.findOne(data);
                     if(userFb){
@@ -50,7 +50,6 @@ class Find_accounts{
             next(e)
         }
     }
-
 
     async getDataAccount(req, res, next){
         const {userId, token} = req.body;
