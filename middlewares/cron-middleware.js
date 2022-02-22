@@ -30,7 +30,7 @@ function startCron(){
                           resolve(body);
                           clearInterval(id)
                         } else if(error) {
-                            console.log(error, 'error')
+                            console.log(error, 'errorPublish')
                             reject(error);
                             clearInterval(id)
                         }
@@ -38,7 +38,6 @@ function startCron(){
                 }else{
                     clearInterval(id)
                 }
-
                 count++ 
             }, 5000);
         });
@@ -59,7 +58,8 @@ function startCron(){
                         const token = await TokenFb.findOne({user: post.user_id})
                         if(instUser && token){
                             let text = post.text;
-                            const respMedia = await doRequest(`https://graph.facebook.com/${instUser.id_fbB}/media?media_type=VIDEO&video_url=${post.filePath}&caption=${encodeURIComponent(text)}&thumb_offset=${+post.currentTime}&access_token=${token.tokenFb}`)
+                            let mediaType = post.mimetype == 'video/mp4' ? 'media_type=VIDEO&video_url' : 'image_url';
+                            const respMedia = await doRequest(`https://graph.facebook.com/${instUser.id_fbB}/media?${mediaType}=${post.filePath}&caption=${encodeURIComponent(text)}${post.currentTime ? `&thumb_offset=${+post.currentTime}` : ''}&access_token=${token.tokenFb}`)
                             if(JSON.parse(respMedia).id){
                                 const jsonMediaID = JSON.parse(respMedia).id;
                                 const ddd = await publishContent(`https://graph.facebook.com/${instUser.id_fbB}/media_publish?creation_id=${jsonMediaID}&access_token=${token.tokenFb}`);

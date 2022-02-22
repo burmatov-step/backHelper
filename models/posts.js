@@ -5,8 +5,9 @@ const Posts = new Schema({
     date: {type: String, required: true},
     filePath: {type: String, required: true},
     username: {type: String, required: true},
-    currentTime: {type:String, required: true},
+    currentTime: {type:String},
     text: {type: String, required: true},
+    mimetype: {type: String, required: true},
     posting:{type: Boolean, required: true}
 })
 
