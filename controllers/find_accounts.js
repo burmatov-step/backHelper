@@ -1,16 +1,46 @@
 const userService = require('../service/user-service');
 const {validationResult} = require('express-validator');
 const ApiError = require('../exeptions/api-error')
+const TokenFb = require('../models/token_fb')
 const FindAccountModel = require('../models/find_accounts')
 const request = require('request');
 class Find_accounts{
     async create(req, res, next){
         try{
             const {userId, login, type} = req.body;
-            const dataAccaunt = await FindAccountModel.create({user: userId, login, type})
-            return res.json(dataAccaunt)
+            function doRequest(url) {
+                return new Promise(function (resolve, reject) {
+                  request(url, function (error, res, body) {
+                    if (!error && res.statusCode == 200) {
+                      resolve(body);
+                    } else {
+                      reject(error);
+                    }
+                  });
+                });
+            }
+            // const dataAccount = await TokenFb.findOne({user: userId})
+            // if(dataAccount){
+            //     const isAccount = doRequest(`https://graph.facebook.com/v11.0/${dataAccount.userIdFb}?fields=business_discovery.username(${login}){followers_count}}&access_token=${dataAccount.tokenFb}`)
+            //     if(isAccount){
+            //         const dataAccaunt = await FindAccountModel.create({user: userId, login, type})
+            //         return res.json({
+            //             success: true,
+            //             data: dataAccaunt
+            //         })
+            //     }
+            // }
+            
+            return res.json({
+                success: false,
+                message: 'Ошибка, аккаунт не доступен'
+            })
+            
         } catch(e){
-            next(e)
+            return res.json({
+                success: false,
+                message: 'Ошибка, аккаунт не доступен'
+            })
         }
     }
     async findAll(req, res, next){

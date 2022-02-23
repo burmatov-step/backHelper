@@ -42,7 +42,7 @@ const start = async () =>{
            useUnifiedTopology: true
        })
     app.listen(PORT, () => console.log(`Server start on PORT = ${PORT}`))
-    startCron()
+    // startCron()
    }catch(e){
        console.log(e)
    }
