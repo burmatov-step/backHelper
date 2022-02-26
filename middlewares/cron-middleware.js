@@ -37,6 +37,7 @@ function startCron(){
                     });
                 }else{
                     clearInterval(id)
+                    reject(error);
                 }
                 count++ 
             }, 5000);

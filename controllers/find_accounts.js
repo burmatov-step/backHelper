@@ -8,6 +8,12 @@ class Find_accounts{
     async create(req, res, next){
         try{
             const {userId, login, type} = req.body;
+            if(!userId || login.length < 1 || !type.length < 1){
+                return res.json({
+                    success: false,
+                    message: 'Ошибка, не хватает данных'
+                })
+            }
             function doRequest(url) {
                 return new Promise(function (resolve, reject) {
                   request(url, function (error, res, body) {
@@ -19,17 +25,17 @@ class Find_accounts{
                   });
                 });
             }
-            // const dataAccount = await TokenFb.findOne({user: userId})
-            // if(dataAccount){
-            //     const isAccount = doRequest(`https://graph.facebook.com/v11.0/${dataAccount.userIdFb}?fields=business_discovery.username(${login}){followers_count}}&access_token=${dataAccount.tokenFb}`)
-            //     if(isAccount){
-            //         const dataAccaunt = await FindAccountModel.create({user: userId, login, type})
-            //         return res.json({
-            //             success: true,
-            //             data: dataAccaunt
-            //         })
-            //     }
-            // }
+            const dataAccount = await TokenFb.findOne({user: userId})
+            if(dataAccount){
+                const isAccount = doRequest(`https://graph.facebook.com/v11.0/${dataAccount.userIdFb}?fields=business_discovery.username(${login}){followers_count}}&access_token=${dataAccount.tokenFb}`)
+                if(isAccount){
+                    const dataAccaunt = await FindAccountModel.create({user: userId, login, type})
+                    return res.json({
+                        success: true,
+                        data: dataAccaunt
+                    })
+                }
+            }
             
             return res.json({
                 success: false,
