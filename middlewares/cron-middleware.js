@@ -21,7 +21,7 @@ function startCron(){
     }
 
     const  publishContent = async(url) => {
-        return new Promise(async(resolve) => {
+        return new Promise(async(resolve, reject) => {
             let count = 0
             var id = setInterval(async() => {
                 if(count <=5){
@@ -37,14 +37,14 @@ function startCron(){
                     });
                 }else{
                     clearInterval(id)
-                    reject(error);
+                    reject(false);
                 }
                 count++ 
             }, 5000);
         });
     }
     
-    cron.schedule('* * * * *', async() => {
+    cron.schedule('*/5 * * * *', async() => {
         try{
             const posts = await Posts.find({
                 posting: false
@@ -67,7 +67,7 @@ function startCron(){
                                 post.posting = true
                                 post.save()
                                 const fileName = post.filePath.split('/')[post.filePath.split('/').length - 1]
-                                fs.unlinkSync(path.resolve(__dirname, '..', 'files', fileName))
+                                fs.unlinkSync(path.resolve(__dirname, '..', 'files', `${post.user_id}`, fileName))
                             }
                         }
                     }

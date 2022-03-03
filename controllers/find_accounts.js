@@ -2,13 +2,14 @@ const userService = require('../service/user-service');
 const {validationResult} = require('express-validator');
 const ApiError = require('../exeptions/api-error')
 const TokenFb = require('../models/token_fb')
+const Fb_users = require('../models/fb_users')
 const FindAccountModel = require('../models/find_accounts')
 const request = require('request');
 class Find_accounts{
     async create(req, res, next){
         try{
             const {userId, login, type} = req.body;
-            if(!userId || login.length < 1 || !type.length < 1){
+            if(!userId || login.length < 1 || type.length < 1){
                 return res.json({
                     success: false,
                     message: 'Ошибка, не хватает данных'
@@ -18,16 +19,17 @@ class Find_accounts{
                 return new Promise(function (resolve, reject) {
                   request(url, function (error, res, body) {
                     if (!error && res.statusCode == 200) {
-                      resolve(body);
+                      resolve(true);
                     } else {
-                      reject(error);
+                      reject(false);
                     }
                   });
                 });
             }
             const dataAccount = await TokenFb.findOne({user: userId})
-            if(dataAccount){
-                const isAccount = doRequest(`https://graph.facebook.com/v11.0/${dataAccount.userIdFb}?fields=business_discovery.username(${login}){followers_count}}&access_token=${dataAccount.tokenFb}`)
+            const id_acc = await Fb_users.findOne({user: userId})
+            if(dataAccount && id_acc){
+                const isAccount = await doRequest(`https://graph.facebook.com/v11.0/${id_acc.id_fbB}?fields=business_discovery.username(${login}){followers_count,media_count}&access_token=${dataAccount.tokenFb}`)
                 if(isAccount){
                     const dataAccaunt = await FindAccountModel.create({user: userId, login, type})
                     return res.json({

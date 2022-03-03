@@ -1,7 +1,8 @@
 const userService = require('../service/user-service');
 const {validationResult} = require('express-validator');
-const ApiError = require('../exeptions/api-error')
-
+const ApiError = require('../exeptions/api-error');
+const fs = require('fs');
+const path = require('path')
 class UserController{
     async registration(req, res, next){
         try{
@@ -11,6 +12,10 @@ class UserController{
             }
             const {email, password} = req.body;
             const userData = await userService.registration(email, password)
+            let filePath = path.resolve(req.filePath, `${userData.user.id}`);
+            if(!fs.existsSync(filePath)){
+              await fs.mkdirSync(filePath)
+            }
             // res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
             return res.json(userData)
         } catch(e){
